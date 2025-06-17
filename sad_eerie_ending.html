@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Presentation - The End</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      width: 100vw;
+      overflow: hidden;
+      background: #000;
+    }
+    body {
+      background: radial-gradient(ellipse at 60% 40%, #18181b 60%, #000 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      min-height: 100vh;
+      min-width: 100vw;
+    }
+    .vignette {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 2;
+      background: radial-gradient(ellipse at 50% 60%, transparent 60%, #000 100%);
+      opacity: 0.9;
+      mix-blend-mode: multiply;
+      transition: opacity 1s;
+    }
+    .static-noise {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      opacity: 0.08;
+      background: url('https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif');
+      mix-blend-mode: lighten;
+      animation: noisePulse 2.5s infinite alternate;
+    }
+    @keyframes noisePulse {
+      0% { opacity: 0.08; }
+      100% { opacity: 0.16; }
+    }
+    .blood-stain {
+      position: fixed;
+      left: 50%;
+      top: 0;
+      width: 300px;
+      height: 180px;
+      transform: translateX(-50%);
+      z-index: 1002;
+      opacity: 0;
+      background: url('https://i.imgur.com/1Q9Z1Zm.png') center/contain no-repeat;
+      filter: blur(1.5px) brightness(0.7);
+      animation: bloodAppear 6s 3s forwards;
+      pointer-events: none;
+    }
+    @keyframes bloodAppear {
+      0% { opacity: 0; }
+      80% { opacity: 0.7; }
+      100% { opacity: 0.6; }
+    }
+    .eye {
+      position: fixed;
+      left: 50%;
+      top: 65%;
+      transform: translate(-50%, -50%);
+      z-index: 1001;
+      pointer-events: none;
+      opacity: 0;
+      animation: eyeAppear 18s 2s forwards;
+      filter: blur(0.5px) drop-shadow(0 0 18px #fff8);
+    }
+    @keyframes eyeAppear {
+      0% { opacity: 0; }
+      10% { opacity: 0.13; }
+      20% { opacity: 0.7; }
+      25% { opacity: 0.13; }
+      40% { opacity: 0.7; }
+      60% { opacity: 0.13; }
+      80% { opacity: 0.7; }
+      100% { opacity: 0.13; }
+    }
+    .message-box {
+      position: absolute;
+      left: 50%;
+      top: 45%;
+      transform: translate(-50%, -50%);
+      width: 90vw;
+      max-width: 540px;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      font-family: 'Segoe UI', 'Roboto', Arial, sans-serif;
+      font-size: 1.5rem;
+      color: #e0e0e0;
+      background: rgba(10,10,20,0.96);
+      border-radius: 14px;
+      padding: 32px 22px;
+      box-shadow: 0 4px 32px #000a;
+      border: 1px solid #222;
+      letter-spacing: 1.2px;
+      z-index: 10;
+      transition: opacity 0.7s;
+      text-shadow: 0 2px 24px #000, 0 0px 2px #222;
+      backdrop-filter: blur(2px);
+      filter: blur(0.5px);
+    }
+    .message-box.visible {
+      opacity: 1;
+      pointer-events: auto;
+      filter: blur(0px);
+      transition: opacity 0.7s, filter 1.2s;
+    }
+    .message-box.fadeout {
+      opacity: 0;
+      filter: blur(2.5px);
+      transition: opacity 0.7s, filter 1.2s;
+    }
+    .message-box.distort {
+      animation: distortText 0.13s 8 alternate;
+    }
+    @keyframes distortText {
+      0% { letter-spacing: 1.2px; filter: blur(0.5px);}
+      100% { letter-spacing: 4px; filter: blur(2px);}
+    }
+    .flash {
+      position: fixed;
+      inset: 0;
+      background: #fff;
+      opacity: 0;
+      z-index: 2000;
+      pointer-events: none;
+      animation: flashAnim 0.2s linear;
+    }
+    @keyframes flashAnim {
+      0% { opacity: 0; }
+      30% { opacity: 0.8; }
+      100% { opacity: 0; }
+    }
+    .video-container {
+      position: absolute;
+      z-index: 20;
+      left: 50%;
+      top: 60%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 1s cubic-bezier(.4,2,.6,1);
+    }
+    .video-container.show {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 1s cubic-bezier(.4,2,.6,1);
+    }
+    video {
+      width: 480px;
+      max-width: 90vw;
+      border-radius: 16px;
+      box-shadow: 0 8px 32px #000a;
+      background: #111;
+      outline: none;
+    }
+    @media (max-width: 600px) {
+      .message-box {
+        font-size: 1.1rem;
+        max-width: 96vw;
+      }
+      video {
+        width: 98vw;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="vignette"></div>
+  <div class="static-noise"></div>
+  <div class="blood-stain"></div>
+  <div class="eye">
+    <svg viewBox="0 0 120 40">
+      <ellipse cx="60" cy="20" rx="28" ry="12" fill="#fff" />
+      <ellipse cx="60" cy="20" rx="10" ry="10" fill="#111" />
+      <ellipse cx="60" cy="20" rx="4" ry="4" fill="#fff" />
+    </svg>
+  </div>
+  <div class="message-box" id="msgBox"></div>
+  <div class="flash" id="flash"></div>
+  <div class="video-container" id="videoContainer">
+    <video id="endingVideo" controls>
+      <source src="ending.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <audio id="ambience" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b8e7e1e7.mp3" loop></audio>
+  <audio id="whisper" src="https://cdn.pixabay.com/audio/2022/03/15/audio_115b9b4e0e.mp3"></audio>
+  <audio id="reverse" src="https://cdn.pixabay.com/audio/2022/10/16/audio_12b8e7e1e7.mp3"></audio>
+  <script>
+    // Typewriter effect for a given element and text
+    function typeWriter(element, text, speed = 38, callback) {
+      element.textContent = "";
+      let i = 0;
+      element.classList.add('visible');
+      function type() {
+        if (i < text.length) {
+          element.textContent += text.charAt(i);
+          i++;
+          setTimeout(type, text.charAt(i-1) === "<" ? 0 : speed);
+        } else if (callback) {
+          callback();
+        }
+      }
+      type();
+    }
+
+    // Flash effect for disturbing moments
+    function flashScreen() {
+      const flash = document.getElementById('flash');
+      flash.style.animation = 'none';
+      void flash.offsetWidth;
+      flash.style.animation = null;
+    }
+
+    window.onload = function() {
+      const ambience = document.getElementById('ambience');
+      ambience.volume = 0.12;
+      ambience.play().catch(()=>{});
+      const whisper = document.getElementById('whisper');
+      setTimeout(() => { whisper.volume = 0.22; whisper.play().catch(()=>{}); }, 1800);
+
+      const msgBox = document.getElementById('msgBox');
+      const sadText = "The room feels cold and empty.\nShadows linger, and silence fills the air.\n\nYou are not alone.";
+      const gratefulText = "But deep inside, I am grateful for the chance to present this to you.\nThank you for listening.";
+      const breakWall = "You stayed until the end.\nBut something stayed with you.";
+
+      // Show sad message with typewriter
+      typeWriter(msgBox, sadText, 38, () => {
+        setTimeout(() => {
+          msgBox.classList.add('distort');
+          setTimeout(() => {
+            msgBox.classList.remove('visible');
+            msgBox.classList.remove('distort');
+            msgBox.classList.add('fadeout');
+            setTimeout(() => {
+              msgBox.classList.remove('fadeout');
+              typeWriter(msgBox, gratefulText, 38, () => {
+                setTimeout(() => {
+                  msgBox.classList.add('distort');
+                  setTimeout(() => {
+                    msgBox.classList.remove('visible');
+                    msgBox.classList.remove('distort');
+                    msgBox.classList.add('fadeout');
+                    setTimeout(() => {
+                      msgBox.classList.remove('fadeout');
+                      // Sudden flash and final message
+                      flashScreen();
+                      setTimeout(() => {
+                        typeWriter(msgBox, breakWall, 60, () => {
+                          setTimeout(() => {
+                            msgBox.classList.remove('visible');
+                            msgBox.classList.add('fadeout');
+                            setTimeout(() => {
+                              msgBox.style.display = "none";
+                              // Show video
+                              document.getElementById('videoContainer').classList.add('show');
+                              document.getElementById('endingVideo').play();
+                            }, 900);
+                          }, 2500);
+                        });
+                        msgBox.classList.remove('fadeout');
+                        msgBox.style.display = "";
+                        msgBox.classList.add('visible');
+                      }, 200);
+                    }, 700);
+                  }, 900);
+                }, 1800);
+              });
+              msgBox.classList.remove('fadeout');
+              msgBox.style.display = "";
+              msgBox.classList.add('visible');
+            }, 700);
+          }, 900);
+        }, 2200);
+      });
+      msgBox.classList.remove('fadeout');
+      msgBox.style.display = "";
+      msgBox.classList.add('visible');
+    };
+  </script>
+</body>
+</html>
