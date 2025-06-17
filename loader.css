@@ -1,0 +1,59 @@
+/* Loader Overlay */
+#loader {
+  z-index: 9999;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(24,24,27,0.95);
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.7s;
+  flex-direction: column;
+  gap: 16px;
+  font-family: 'Montserrat', Arial, sans-serif;
+  font-weight: 500;
+  font-size: 1.2rem;
+}
+
+/* Loader Content Centering */
+.loader-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Loader Text */
+.loader-text {
+  font-family: 'Orbitron', Arial, sans-serif;
+  letter-spacing: 2px;
+  color: #ffd740;
+  font-size: 2.2rem;
+  text-align: center;
+}
+
+/* Loader Dots Animation */
+.loader-text .dot1, .loader-text .dot2, .loader-text .dot3 {
+  transition: opacity 0.2s;
+}
+
+/* Loader Spinner */
+.loader-spinner {
+  font-size: 64px;
+  color: #ffd740;
+  margin-bottom: 24px;
+  animation: loader-spin 1.2s linear infinite;
+}
+
+@keyframes loader-spin {
+  0% { transform: rotate(0deg);}
+  100% { transform: rotate(360deg);}
+}
+
+/* Fade out transition for loader */
+#loader.fade-out {
+  opacity: 0;
+  pointer-events: none;
+}
